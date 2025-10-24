@@ -50,7 +50,14 @@
     "welcome": "Bon retour",
     "overview": "Aperçu",
     "recentActivity": "Activité récente",
-    "statistics": "Statistiques"
+    "statistics": "Statistiques",
+    "programs": "Programmes",
+    "locations": "Emplacements",
+    "team": "Équipe",
+    "teamMembers": "Membres de l'équipe",
+    "viewDetails": "Voir les détails",
+    "quickActions": "Actions rapides",
+    "quickActionsDescription": "Tâches courantes et raccourcis"
   },
   "organization": {
     "title": "Organisation",

@@ -16,6 +16,14 @@ export default function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Apply intl middleware first for proper locale detection
+  const intlResponse = intlMiddleware(request);
+  
+  // If intl middleware redirected, return that response
+  if (intlResponse.status === 307 || intlResponse.status === 308) {
+    return intlResponse;
+  }
+
   // Check for authentication token
   const token = request.cookies.get('access_token')?.value;
 
@@ -23,12 +31,6 @@ export default function middleware(request: NextRequest) {
   const authPages = ['/login', '/register'];
   const isAuthPage = authPages.some((page) =>
     pathname.includes(page)
-  );
-
-  // Define protected routes (everything except auth pages and public routes)
-  const publicRoutes = ['/', ...authPages];
-  const isPublicRoute = publicRoutes.some((route) =>
-    pathname.endsWith(route) || pathname === `/${request.nextUrl.pathname.split('/')[1]}`
   );
 
   // If no token and trying to access protected route, redirect to login
@@ -45,8 +47,7 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Apply intl middleware for locale handling
-  return intlMiddleware(request);
+  return intlResponse;
 }
 
 export const config = {
@@ -55,4 +56,5 @@ export const config = {
   // - … the ones containing a dot (e.g. `favicon.ico`)
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 };
+
 

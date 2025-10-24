@@ -1,0 +1,46 @@
+# DigitalOcean App Platform Configuration
+# Deploy with: doctl apps create --spec digitalocean-app.yaml
+
+name: bionezis-frontend
+region: fra
+
+services:
+- name: frontend
+  source_dir: /
+  github:
+    repo: your-username/bionezis
+    branch: main
+    deploy_on_push: true
+  
+  build_command: npm run build
+  run_command: npm start
+  
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  
+  http_port: 3000
+  
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: NEXT_PUBLIC_API_URL
+    value: https://bionezis-backend-xxxxx.ondigitalocean.app
+  - key: NEXT_PUBLIC_FRONTEND_URL
+    value: https://bionezis-frontend-xxxxx.ondigitalocean.app
+  
+  routes:
+  - path: /
+  
+  health_check:
+    http_path: /
+    initial_delay_seconds: 30
+    period_seconds: 10
+    timeout_seconds: 5
+    success_threshold: 1
+    failure_threshold: 3
+
+# Optional: Custom domain
+domains:
+- domain: app.bionezis.com
+  type: PRIMARY

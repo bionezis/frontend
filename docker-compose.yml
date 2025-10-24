@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      - NEXT_PUBLIC_FRONTEND_URL=${NEXT_PUBLIC_FRONTEND_URL:-http://localhost:3000}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - bionezis-network
+
+  # Development service
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deps
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      - NEXT_PUBLIC_FRONTEND_URL=${NEXT_PUBLIC_FRONTEND_URL:-http://localhost:3000}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    profiles: ["development"]
+    networks:
+      - bionezis-network
+
+  # Backend service (reference to backend)
+  backend:
+    image: bionezis-backend:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=False
+      - ALLOWED_HOSTS=localhost,127.0.0.1,frontend
+    networks:
+      - bionezis-network
+    profiles: ["with-backend"]
+
+networks:
+  bionezis-network:
+    driver: bridge
+
+# Usage:
+# Development: docker-compose --profile development up frontend-dev
+# Production: docker-compose up frontend
+# With Backend: docker-compose --profile with-backend up

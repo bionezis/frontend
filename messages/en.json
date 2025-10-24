@@ -47,10 +47,16 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome back",
+    "welcome": "Welcome to the Bionezis Manager Portal",
     "overview": "Overview",
     "recentActivity": "Recent Activity",
-    "statistics": "Statistics"
+    "statistics": "Statistics",
+    "quickActions": "Quick Actions",
+    "quickActionsDescription": "Common tasks and shortcuts",
+    "viewDetails": "View details",
+    "programs": "Programs",
+    "locations": "Locations",
+    "teamMembers": "Team Members"
   },
   "organization": {
     "title": "Organization",
@@ -71,7 +77,11 @@
     "approved": "Approved",
     "pendingMessage": "Your organization is pending admin approval. You'll be notified once approved.",
     "createSuccess": "Organization created successfully",
-    "updateSuccess": "Organization updated successfully"
+    "updateSuccess": "Organization updated successfully",
+    "noOrganization": "No Organization",
+    "noDescription": "No description provided",
+    "pendingApproval": "Pending Approval",
+    "approvalPending": "Your organization is awaiting approval from an administrator. You can manage programs and locations, but some features may be limited until approval."
   },
   "programs": {
     "title": "Programs",
@@ -139,12 +149,20 @@
     "title": "Team",
     "members": "Team Members",
     "invite": "Invite Member",
+    "manage": "Manage Team",
     "role": "Role",
     "owner": "Owner",
     "admin": "Admin",
     "member": "Member",
+    "firstName": "First Name",
+    "lastName": "Last Name",
     "inviteEmail": "Email to invite",
+    "selectRole": "Select role",
+    "roleMember": "Member",
+    "roleAdmin": "Admin",
+    "roleOwner": "Owner",
     "inviteSuccess": "Invitation sent successfully",
+    "inviteError": "Failed to send invitation",
     "removeSuccess": "Member removed successfully"
   },
   "profile": {

@@ -47,10 +47,16 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welkom terug",
+    "welcome": "Welkom bij de Bionezis Manager Portal",
     "overview": "Overzicht",
     "recentActivity": "Recente activiteit",
-    "statistics": "Statistieken"
+    "statistics": "Statistieken",
+    "quickActions": "Snelle acties",
+    "quickActionsDescription": "Veelgebruikte taken en snelkoppelingen",
+    "viewDetails": "Bekijk details",
+    "programs": "Programma's",
+    "locations": "Locaties",
+    "teamMembers": "Teamleden"
   },
   "organization": {
     "title": "Organisatie",
@@ -71,7 +77,11 @@
     "approved": "Goedgekeurd",
     "pendingMessage": "Uw organisatie wacht op goedkeuring door de beheerder. U wordt op de hoogte gesteld zodra deze is goedgekeurd.",
     "createSuccess": "Organisatie succesvol aangemaakt",
-    "updateSuccess": "Organisatie succesvol bijgewerkt"
+    "updateSuccess": "Organisatie succesvol bijgewerkt",
+    "noOrganization": "Geen organisatie",
+    "noDescription": "Geen beschrijving beschikbaar",
+    "pendingApproval": "In afwachting van goedkeuring",
+    "approvalPending": "Uw organisatie wacht op goedkeuring van een beheerder. U kunt programma's en locaties beheren, maar sommige functies kunnen beperkt zijn tot goedkeuring."
   },
   "programs": {
     "title": "Programma's",
@@ -143,8 +153,15 @@
     "owner": "Eigenaar",
     "admin": "Beheerder",
     "member": "Lid",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
     "inviteEmail": "E-mail voor uitnodiging",
+    "selectRole": "Selecteer rol",
+    "roleMember": "Lid",
+    "roleAdmin": "Beheerder",
+    "roleOwner": "Eigenaar",
     "inviteSuccess": "Uitnodiging succesvol verzonden",
+    "inviteError": "Uitnodiging verzenden mislukt",
     "removeSuccess": "Lid succesvol verwijderd"
   },
   "profile": {

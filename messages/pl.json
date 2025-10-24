@@ -47,10 +47,16 @@
   },
   "dashboard": {
     "title": "Panel",
-    "welcome": "Witaj ponownie",
+    "welcome": "Witaj w portalu Bionezis Manager",
     "overview": "Przegląd",
     "recentActivity": "Ostatnia aktywność",
-    "statistics": "Statystyki"
+    "statistics": "Statystyki",
+    "quickActions": "Szybkie akcje",
+    "quickActionsDescription": "Typowe zadania i skróty",
+    "viewDetails": "Zobacz szczegóły",
+    "programs": "Programy",
+    "locations": "Lokalizacje",
+    "teamMembers": "Członkowie zespołu"
   },
   "organization": {
     "title": "Organizacja",
@@ -71,7 +77,11 @@
     "approved": "Zatwierdzona",
     "pendingMessage": "Twoja organizacja oczekuje na zatwierdzenie przez administratora. Zostaniesz powiadomiony po zatwierdzeniu.",
     "createSuccess": "Organizacja została utworzona pomyślnie",
-    "updateSuccess": "Organizacja została zaktualizowana pomyślnie"
+    "updateSuccess": "Organizacja została zaktualizowana pomyślnie",
+    "noOrganization": "Brak organizacji",
+    "noDescription": "Brak opisu",
+    "pendingApproval": "Oczekuje na zatwierdzenie",
+    "approvalPending": "Twoja organizacja oczekuje na zatwierdzenie przez administratora. Możesz zarządzać programami i lokalizacjami, ale niektóre funkcje mogą być ograniczone do momentu zatwierdzenia."
   },
   "programs": {
     "title": "Programy",
@@ -139,12 +149,20 @@
     "title": "Zespół",
     "members": "Członkowie zespołu",
     "invite": "Zaproś członka",
+    "manage": "Zarządzaj zespołem",
     "role": "Rola",
     "owner": "Właściciel",
     "admin": "Administrator",
     "member": "Członek",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
     "inviteEmail": "Email do zaproszenia",
+    "selectRole": "Wybierz rolę",
+    "roleMember": "Członek",
+    "roleAdmin": "Administrator",
+    "roleOwner": "Właściciel",
     "inviteSuccess": "Zaproszenie wysłane pomyślnie",
+    "inviteError": "Nie udało się wysłać zaproszenia",
     "removeSuccess": "Członek został usunięty pomyślnie"
   },
   "profile": {
