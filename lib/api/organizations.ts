@@ -73,7 +73,7 @@ export const organizationsApi = {
    * Update organization
    */
   updateOrganization: async (id: number, data: UpdateOrganizationData): Promise<Organization> => {
-    const response = await apiClient.put(`/api/v1/organizations/${id}`, data);
+    const response = await apiClient.patch(`/api/v1/organizations/${id}`, data);
     return response.data;
   },
 

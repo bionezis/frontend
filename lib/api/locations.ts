@@ -63,7 +63,7 @@ export const locationsApi = {
     locationId: number,
     data: UpdateLocationData
   ): Promise<Location> => {
-    const response = await apiClient.put(
+    const response = await apiClient.patch(
       `/api/v1/organizations/${organizationId}/locations/${locationId}`,
       data
     );

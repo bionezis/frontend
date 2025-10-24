@@ -145,7 +145,7 @@ export const programsApi = {
       formData.append('brochure', data.brochure);
     }
 
-    const response = await apiClient.put(
+    const response = await apiClient.patch(
       `/api/v1/organizations/${organizationId}/programs/${programId}`,
       formData,
       {
