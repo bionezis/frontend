@@ -78,7 +78,11 @@
     "approved": "Aprobado",
     "pendingMessage": "Tu organización está pendiente de aprobación por el administrador. Se te notificará una vez aprobada.",
     "createSuccess": "Organización creada exitosamente",
-    "updateSuccess": "Organización actualizada exitosamente"
+    "updateSuccess": "Organización actualizada exitosamente",
+    "noOrganization": "Sin organización",
+    "noDescription": "Sin descripción disponible",
+    "pendingApproval": "Pendiente de aprobación",
+    "approvalPending": "Tu organización está pendiente de aprobación por un administrador. Puedes gestionar programas y ubicaciones, pero algunas funciones pueden estar limitadas hasta la aprobación."
   },
   "programs": {
     "title": "Programas",
@@ -146,12 +150,20 @@
     "title": "Equipo",
     "members": "Miembros del equipo",
     "invite": "Invitar miembro",
+    "manage": "Gestionar equipo",
     "role": "Rol",
     "owner": "Propietario",
     "admin": "Administrador",
     "member": "Miembro",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
     "inviteEmail": "Correo electrónico para invitar",
+    "selectRole": "Seleccionar rol",
+    "roleMember": "Miembro",
+    "roleAdmin": "Administrador",
+    "roleOwner": "Propietario",
     "inviteSuccess": "Invitación enviada exitosamente",
+    "inviteError": "Error al enviar invitación",
     "removeSuccess": "Miembro eliminado exitosamente"
   },
   "profile": {

@@ -78,7 +78,11 @@
     "approved": "Genehmigt",
     "pendingMessage": "Ihre Organisation wartet auf die Genehmigung durch den Administrator. Sie werden benachrichtigt, sobald sie genehmigt wurde.",
     "createSuccess": "Organisation erfolgreich erstellt",
-    "updateSuccess": "Organisation erfolgreich aktualisiert"
+    "updateSuccess": "Organisation erfolgreich aktualisiert",
+    "noOrganization": "Keine Organisation",
+    "noDescription": "Keine Beschreibung verfügbar",
+    "pendingApproval": "Ausstehende Genehmigung",
+    "approvalPending": "Ihre Organisation wartet auf die Genehmigung durch einen Administrator. Sie können Programme und Standorte verwalten, aber einige Funktionen können bis zur Genehmigung eingeschränkt sein."
   },
   "programs": {
     "title": "Programme",
@@ -146,12 +150,20 @@
     "title": "Team",
     "members": "Teammitglieder",
     "invite": "Mitglied einladen",
+    "manage": "Team verwalten",
     "role": "Rolle",
     "owner": "Inhaber",
     "admin": "Administrator",
     "member": "Mitglied",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
     "inviteEmail": "E-Mail für Einladung",
+    "selectRole": "Rolle auswählen",
+    "roleMember": "Mitglied",
+    "roleAdmin": "Administrator",
+    "roleOwner": "Inhaber",
     "inviteSuccess": "Einladung erfolgreich gesendet",
+    "inviteError": "Fehler beim Senden der Einladung",
     "removeSuccess": "Mitglied erfolgreich entfernt"
   },
   "profile": {
