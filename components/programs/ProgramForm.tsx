@@ -24,7 +24,7 @@ import {
 import { useTranslations } from 'next-intl';
 import { Program, CreateProgramData, UpdateProgramData } from '@/lib/api/programs';
 import { Upload, FileText, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const MAX_FILE_SIZE = 200 * 1024; // 200KB
 
@@ -73,12 +73,32 @@ export function ProgramForm({
     },
   });
 
+  // Reset form when program data changes
+  useEffect(() => {
+    if (program) {
+      console.log('DEBUG: Resetting form with program data:', {
+        name: program.name,
+        language: program.language,
+        program_type: program.program_type
+      });
+      form.reset({
+        name: program.name || '',
+        description: program.description || '',
+        short_description: program.short_description || '',
+        language: program.language || 'en',
+        program_type: program.program_type || 'therapy',
+      });
+    }
+  }, [program, form]);
+
   const handleSubmit = async (data: ProgramFormValues) => {
+    console.log('DEBUG: Form submit data:', data);
     const submitData = {
       ...data,
       short_description: data.short_description || undefined,
       brochure: selectedFile || undefined,
     };
+    console.log('DEBUG: Final submit data:', submitData);
     await onSubmit(submitData);
   };
 
