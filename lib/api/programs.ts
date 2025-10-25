@@ -147,12 +147,7 @@ export const programsApi = {
 
     const response = await apiClient.patch(
       `/api/v1/organizations/${organizationId}/programs/${programId}`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+      formData
     );
     return response.data;
   },
