@@ -1,18 +1,29 @@
 import apiClient from './client';
 
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
 export interface Location {
   id: number;
   organization_id: number;
+  organization_name: string;
   name: string;
   slug: string;
+  description: string;
   address: string;
   city: string;
+  state: string;
   country: string;
-  postal_code?: string;
-  phone?: string;
-  email?: string;
-  latitude?: number;
-  longitude?: number;
+  postal_code: string;
+  full_address: string;
+  phone: string;
+  email: string;
+  coordinates?: Coordinates;
+  has_coordinates: boolean;
+  is_active: boolean;
+  geocoded_at?: string;
   created_at: string;
   updated_at: string;
 }

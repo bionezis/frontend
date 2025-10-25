@@ -201,10 +201,10 @@ export default function LocationsPage() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {location.latitude && location.longitude ? (
+                      {location.coordinates ? (
                         <Badge variant="outline" className="text-xs">
                           <MapPin className="mr-1 h-3 w-3" />
-                          {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
+                          {location.coordinates.latitude.toFixed(4)}, {location.coordinates.longitude.toFixed(4)}
                         </Badge>
                       ) : (
                         <span className="text-gray-400 text-sm">Not geocoded</span>
