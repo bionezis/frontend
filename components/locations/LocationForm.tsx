@@ -187,7 +187,7 @@ export function LocationForm({
             </div>
           </div>
 
-          {location && location.latitude && location.longitude && (
+          {location && location.coordinates && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Geocoding Information</h3>
               <div className="rounded-lg border bg-green-50 p-4">
@@ -196,8 +196,8 @@ export function LocationForm({
                   <span className="font-medium text-green-900">Location Geocoded</span>
                 </div>
                 <div className="mt-2 space-y-1 text-sm text-green-800">
-                  <div>Latitude: {location.latitude.toFixed(6)}</div>
-                  <div>Longitude: {location.longitude.toFixed(6)}</div>
+                  <div>Latitude: {location.coordinates.latitude.toFixed(6)}</div>
+                  <div>Longitude: {location.coordinates.longitude.toFixed(6)}</div>
                   <div className="text-xs text-green-600 mt-2">
                     Coordinates are automatically generated when the location is saved.
                   </div>

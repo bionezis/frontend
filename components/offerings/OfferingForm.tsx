@@ -62,7 +62,7 @@ export function OfferingForm({
   const form = useForm<OfferingFormValues>({
     resolver: zodResolver(offeringSchema),
     defaultValues: {
-      location_id: offering?.location_id || 0,
+      location_id: offering?.location?.id || 0,
       contact_name: offering?.contact_name || '',
       contact_phone: offering?.contact_phone || '',
       contact_email: offering?.contact_email || '',

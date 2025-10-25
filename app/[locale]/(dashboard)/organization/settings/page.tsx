@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
@@ -39,6 +39,20 @@ export default function OrganizationSettingsPage() {
   const organization = organizations?.[0];
   const isOwner = user?.role === 'owner';
 
+  // Redirect if not owner
+  useEffect(() => {
+    if (user && !isOwner) {
+      router.push(`/${locale}/organization`);
+    }
+  }, [user, isOwner, router, locale]);
+
+  // Redirect if no organization
+  useEffect(() => {
+    if (!isLoading && !organization) {
+      router.push(`/${locale}/organization/create`);
+    }
+  }, [isLoading, organization, router, locale]);
+
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpdateOrganizationData }) =>
       organizationsApi.updateOrganization(id, data),
@@ -74,12 +88,6 @@ export default function OrganizationSettingsPage() {
     },
   });
 
-  // Redirect if not owner
-  if (!isOwner) {
-    router.push(`/${locale}/organization`);
-    return null;
-  }
-
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -89,8 +97,8 @@ export default function OrganizationSettingsPage() {
     );
   }
 
-  if (!organization) {
-    router.push(`/${locale}/organization/create`);
+  // Don't render if not owner or no organization (redirects are handled in useEffect)
+  if (!isOwner || !organization) {
     return null;
   }
 

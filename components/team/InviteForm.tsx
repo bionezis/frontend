@@ -20,7 +20,7 @@ const inviteSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   first_name: z.string().min(1, 'First name is required'),
   last_name: z.string().min(1, 'Last name is required'),
-  role: z.enum(['owner', 'member']).default('member'),
+  role: z.enum(['owner', 'member']),
 });
 
 type InviteFormValues = z.infer<typeof inviteSchema>;
