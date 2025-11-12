@@ -3,7 +3,9 @@ import apiClient from './client';
 export interface Organization {
   id: number;
   name: string;
+  slug: string;
   description?: string;
+  logo_url?: string;
   address: string;
   city: string;
   country: string;
@@ -11,7 +13,10 @@ export interface Organization {
   phone?: string;
   email?: string;
   website?: string;
+  is_active: boolean;
   is_approved: boolean;
+  member_count: number;
+  owner_count: number;
   created_at: string;
   updated_at: string;
 }
@@ -26,6 +31,7 @@ export interface CreateOrganizationData {
   phone?: string;
   email?: string;
   website?: string;
+  logo?: File;
 }
 
 export interface UpdateOrganizationData extends CreateOrganizationData {}
@@ -64,17 +70,57 @@ export const organizationsApi = {
   /**
    * Create new organization
    */
-  createOrganization: async (data: CreateOrganizationData): Promise<Organization> => {
-    const response = await apiClient.post('/api/v1/organizations', data);
-    return response.data;
+  createOrganization: async (data: CreateOrganizationData, logo?: File): Promise<Organization> => {
+    if (logo) {
+      // Use FormData for file upload
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('description', data.description || '');
+      formData.append('address', data.address);
+      formData.append('city', data.city);
+      formData.append('country', data.country);
+      if (data.postal_code) formData.append('postal_code', data.postal_code);
+      if (data.phone) formData.append('phone', data.phone);
+      if (data.email) formData.append('email', data.email);
+      if (data.website) formData.append('website', data.website);
+      formData.append('logo', logo);
+      
+      const response = await apiClient.post('/api/v1/organizations', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response.data;
+    } else {
+      const response = await apiClient.post('/api/v1/organizations', data);
+      return response.data;
+    }
   },
 
   /**
    * Update organization
    */
-  updateOrganization: async (id: number, data: UpdateOrganizationData): Promise<Organization> => {
-    const response = await apiClient.patch(`/api/v1/organizations/${id}`, data);
-    return response.data;
+  updateOrganization: async (id: number, data: UpdateOrganizationData, logo?: File): Promise<Organization> => {
+    if (logo) {
+      // Use FormData for file upload
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('description', data.description || '');
+      formData.append('address', data.address);
+      formData.append('city', data.city);
+      formData.append('country', data.country);
+      if (data.postal_code) formData.append('postal_code', data.postal_code);
+      if (data.phone) formData.append('phone', data.phone);
+      if (data.email) formData.append('email', data.email);
+      if (data.website) formData.append('website', data.website);
+      formData.append('logo', logo);
+      
+      const response = await apiClient.patch(`/api/v1/organizations/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response.data;
+    } else {
+      const response = await apiClient.patch(`/api/v1/organizations/${id}`, data);
+      return response.data;
+    }
   },
 
   /**

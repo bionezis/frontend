@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useTranslations } from 'next-intl';
-import { Program, CreateProgramData, UpdateProgramData } from '@/lib/api/programs';
+import { Program, CreateProgramData, UpdateProgramData, ProgramType, programsApi } from '@/lib/api/programs';
 import { Upload, FileText, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -33,7 +33,13 @@ const programSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   short_description: z.string().optional(),
   language: z.enum(['en', 'pl', 'nl', 'fr', 'de', 'es']),
-  program_type: z.enum(['therapy', 'support_group', 'workshop', 'consultation', 'other']),
+  program_type_id: z.number().min(1, 'Please select a program type'),
+  duration_minutes: z.number().min(1, 'Duration must be at least 1 minute').max(1440, 'Duration cannot exceed 24 hours'),
+  benefits: z.string().optional(),
+  requirements: z.string().optional(),
+  target_audience_age_min: z.number().min(0, 'Minimum age cannot be negative').max(120, 'Minimum age cannot exceed 120').optional(),
+  target_audience_age_max: z.number().min(0, 'Maximum age cannot be negative').max(120, 'Maximum age cannot exceed 120').optional(),
+  target_audience_gender: z.enum(['all', 'male', 'female', 'non_binary', 'other']),
   brochure: z
     .instanceof(File)
     .refine((file) => file.size <= MAX_FILE_SIZE, 'File size must be less than 200KB')
@@ -42,6 +48,14 @@ const programSchema = z.object({
       'File must be a PDF'
     )
     .optional(),
+}).refine((data) => {
+  if (data.target_audience_age_min && data.target_audience_age_max) {
+    return data.target_audience_age_min <= data.target_audience_age_max;
+  }
+  return true;
+}, {
+  message: 'Minimum age cannot be greater than maximum age',
+  path: ['target_audience_age_min'],
 });
 
 type ProgramFormValues = z.infer<typeof programSchema>;
@@ -61,6 +75,7 @@ export function ProgramForm({
 }: ProgramFormProps) {
   const t = useTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [programTypes, setProgramTypes] = useState<ProgramType[]>([]);
 
   const form = useForm<ProgramFormValues>({
     resolver: zodResolver(programSchema),
@@ -69,7 +84,13 @@ export function ProgramForm({
       description: program?.description || '',
       short_description: program?.short_description || '',
       language: program?.language || 'en',
-      program_type: program?.program_type || 'therapy',
+      program_type_id: program?.program_type?.id || 1,
+      duration_minutes: program?.duration_minutes || 30,
+      benefits: program?.benefits || '',
+      requirements: program?.requirements || '',
+      target_audience_age_min: program?.target_audience_age_min || undefined,
+      target_audience_age_max: program?.target_audience_age_max || undefined,
+      target_audience_gender: program?.target_audience_gender || 'all',
     },
   });
 
@@ -86,10 +107,29 @@ export function ProgramForm({
         description: program.description || '',
         short_description: program.short_description || '',
         language: program.language || 'en',
-        program_type: program.program_type || 'therapy',
+        program_type_id: program.program_type?.id || 1,
+        duration_minutes: program.duration_minutes || 30,
+        benefits: program.benefits || '',
+        requirements: program.requirements || '',
+        target_audience_age_min: program.target_audience_age_min || undefined,
+        target_audience_age_max: program.target_audience_age_max || undefined,
+        target_audience_gender: program.target_audience_gender || 'all',
       });
     }
   }, [program, form]);
+
+  // Load program types on component mount
+  useEffect(() => {
+    const loadProgramTypes = async () => {
+      try {
+        const types = await programsApi.getProgramTypes();
+        setProgramTypes(types);
+      } catch (error) {
+        console.error('Failed to load program types:', error);
+      }
+    };
+    loadProgramTypes();
+  }, []);
 
   const handleSubmit = async (data: ProgramFormValues) => {
     console.log('DEBUG: Form submit data:', data);
@@ -132,13 +172,6 @@ export function ProgramForm({
     }
   };
 
-  const programTypes = [
-    { value: 'therapy', label: 'Therapy' },
-    { value: 'support_group', label: 'Support Group' },
-    { value: 'workshop', label: 'Workshop' },
-    { value: 'consultation', label: 'Consultation' },
-    { value: 'other', label: 'Other' },
-  ];
 
   const languages = [
     { value: 'en', label: 'English' },
@@ -147,6 +180,14 @@ export function ProgramForm({
     { value: 'fr', label: 'Français' },
     { value: 'de', label: 'Deutsch' },
     { value: 'es', label: 'Español' },
+  ];
+
+  const genderOptions = [
+    { value: 'all', label: 'All Genders' },
+    { value: 'male', label: 'Male' },
+    { value: 'female', label: 'Female' },
+    { value: 'non_binary', label: 'Non-binary' },
+    { value: 'other', label: 'Other' },
   ];
 
   return (
@@ -169,11 +210,11 @@ export function ProgramForm({
 
           <FormField
             control={form.control}
-            name="program_type"
+            name="program_type_id"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('programs.type')}</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select program type" />
@@ -181,8 +222,8 @@ export function ProgramForm({
                   </FormControl>
                   <SelectContent>
                     {programTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
+                      <SelectItem key={type.id} value={type.id.toString()}>
+                        {type.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -248,6 +289,128 @@ export function ProgramForm({
                   ))}
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="duration_minutes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Duration (minutes)</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="30" 
+                    {...field}
+                    onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="target_audience_gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Target Audience Gender</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select target gender" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {genderOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="target_audience_age_min"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Minimum Age (optional)</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="18" 
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="target_audience_age_max"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Maximum Age (optional)</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="65" 
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="benefits"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Benefits</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Describe the benefits participants will gain from this program..."
+                  className="min-h-[100px]"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="requirements"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Requirements</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="List any requirements or prerequisites for participating in this program..."
+                  className="min-h-[100px]"
+                  {...field}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

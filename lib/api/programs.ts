@@ -1,5 +1,17 @@
 import apiClient from './client';
 
+export interface ProgramType {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  image_url?: string;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Program {
   id: number;
   organization_id: number;
@@ -10,7 +22,13 @@ export interface Program {
   short_description?: string;
   brochure_url?: string;
   language: 'en' | 'pl' | 'nl' | 'fr' | 'de' | 'es';
-  program_type: 'therapy' | 'support_group' | 'workshop' | 'consultation' | 'other';
+  program_type: ProgramType;
+  duration_minutes: number;
+  benefits: string;
+  requirements: string;
+  target_audience_age_min?: number;
+  target_audience_age_max?: number;
+  target_audience_gender: 'all' | 'male' | 'female' | 'non_binary' | 'other';
   status: 'draft' | 'approved' | 'published' | 'archived';
   is_published: boolean;
   offering_count: number;
@@ -27,7 +45,13 @@ export interface CreateProgramData {
   description: string;
   short_description?: string;
   language: 'en' | 'pl' | 'nl' | 'fr' | 'de' | 'es';
-  program_type: 'therapy' | 'support_group' | 'workshop' | 'consultation' | 'other';
+  program_type_id: number;
+  duration_minutes: number;
+  benefits?: string;
+  requirements?: string;
+  target_audience_age_min?: number;
+  target_audience_age_max?: number;
+  target_audience_gender: 'all' | 'male' | 'female' | 'non_binary' | 'other';
   brochure?: File;
 }
 
@@ -81,6 +105,14 @@ export interface UpdateOfferingData extends CreateOfferingData {}
 
 export const programsApi = {
   /**
+   * Get all program types
+   */
+  getProgramTypes: async (): Promise<ProgramType[]> => {
+    const response = await apiClient.get('/api/v1/program-types');
+    return response.data.results || response.data;
+  },
+
+  /**
    * Get organization programs
    */
   getPrograms: async (organizationId: number): Promise<Program[]> => {
@@ -108,7 +140,21 @@ export const programsApi = {
       formData.append('short_description', data.short_description);
     }
     formData.append('language', data.language);
-    formData.append('program_type', data.program_type);
+    formData.append('program_type_id', data.program_type_id.toString());
+    formData.append('duration_minutes', data.duration_minutes.toString());
+    if (data.benefits) {
+      formData.append('benefits', data.benefits);
+    }
+    if (data.requirements) {
+      formData.append('requirements', data.requirements);
+    }
+    if (data.target_audience_age_min) {
+      formData.append('target_audience_age_min', data.target_audience_age_min.toString());
+    }
+    if (data.target_audience_age_max) {
+      formData.append('target_audience_age_max', data.target_audience_age_max.toString());
+    }
+    formData.append('target_audience_gender', data.target_audience_gender);
     if (data.brochure) {
       formData.append('brochure', data.brochure);
     }
@@ -140,7 +186,21 @@ export const programsApi = {
       formData.append('short_description', data.short_description);
     }
     formData.append('language', data.language);
-    formData.append('program_type', data.program_type);
+    formData.append('program_type_id', data.program_type_id.toString());
+    formData.append('duration_minutes', data.duration_minutes.toString());
+    if (data.benefits) {
+      formData.append('benefits', data.benefits);
+    }
+    if (data.requirements) {
+      formData.append('requirements', data.requirements);
+    }
+    if (data.target_audience_age_min) {
+      formData.append('target_audience_age_min', data.target_audience_age_min.toString());
+    }
+    if (data.target_audience_age_max) {
+      formData.append('target_audience_age_max', data.target_audience_age_max.toString());
+    }
+    formData.append('target_audience_gender', data.target_audience_gender);
     if (data.brochure) {
       formData.append('brochure', data.brochure);
     }
